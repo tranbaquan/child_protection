@@ -28,6 +28,10 @@ public class ParentsApi implements Crud<Parents> {
     }
 
     public boolean pairWithChild(String childId) {
+        //TODO
+        /* check ParentsId exist return new childId if not exist childId = null
+        * if (ParentsApi.create != null) {childId = ""}
+        * else {childId = null}*/
         return false;
     }
 }
