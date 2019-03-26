@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChildApi implements Crud<Child> {
     @Override
     public Child create(Child obj) {
+        System.out.println("abc");
         return null;
     }
 
