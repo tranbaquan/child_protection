@@ -1,10 +1,15 @@
 package edu.hcmuaf.helloworld.childprotection.model;
 
-//TODO lombok
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Child {
-    //TODO
-    /* String id
-     * String name
-     * int age
-     * String phoneNumber*/
+    private String id;
+    private String name;
+    private int dob;
+    private String phoneNumber;
 }

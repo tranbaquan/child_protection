@@ -2,31 +2,40 @@ package edu.hcmuaf.helloworld.childprotection.api;
 
 import edu.hcmuaf.helloworld.childprotection.model.Child;
 import edu.hcmuaf.helloworld.childprotection.service.Crud;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/child")
 public class ChildApi implements Crud<Child> {
+
     @Override
-    public Child create(Child obj) {
+    @PostMapping
+    public Child create(@RequestBody Child child) {
         return null;
     }
 
     @Override
-    public Child read(String id) {
+    @GetMapping
+    public Child read(@RequestParam String id) {
         return null;
     }
 
     @Override
-    public Child update(Child obj) {
+    @PutMapping
+    public Child update(@RequestBody Child child) {
         return null;
     }
 
     @Override
-    public boolean delete(Child obj) {
+    @DeleteMapping
+    public boolean delete(@RequestBody Child child) {
         return false;
     }
 
-    public boolean acceptConection() {
+    @PostMapping("link")
+    public boolean acceptConnection() {
         return false;
     }
 }

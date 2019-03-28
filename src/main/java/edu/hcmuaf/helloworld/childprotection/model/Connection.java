@@ -2,9 +2,12 @@ package edu.hcmuaf.helloworld.childprotection.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class Parents {
-    private String id;
+@NoArgsConstructor
+public class Connection {
+    private Parents parents;
+    private Child child;
 }
