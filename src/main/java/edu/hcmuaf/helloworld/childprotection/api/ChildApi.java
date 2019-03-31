@@ -1,68 +1,47 @@
 package edu.hcmuaf.helloworld.childprotection.api;
 
+import edu.hcmuaf.helloworld.childprotection.exceptions.NotFoundException;
 import edu.hcmuaf.helloworld.childprotection.model.Child;
-import edu.hcmuaf.helloworld.childprotection.service.Crud;
+import edu.hcmuaf.helloworld.childprotection.service.ChildService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/child")
-public class ChildApi implements Crud<Child> {
+public class ChildApi implements CrudApi<Child> {
+    @Autowired
+    private ChildService service;
 
     @Override
     @PostMapping
-    public Child create(@RequestBody Child child) {
-        //TODO
-        /* input: obj
-         * if obj is  null return error
-         * if obj exist in db return error
-         * return insert obj
-         * */
-        return null;
+    public ResponseEntity<Child> create(@RequestBody Child obj) {
+        Child child = service.create(obj);
+        return new ResponseEntity<>(child, HttpStatus.OK);
     }
 
     @Override
-    @GetMapping
-    public Child read(@RequestParam String id) {
-        //TODO
-        /* input: id
-         * if id exist in db return child
-         * return error
-         * */
-        return null;
+    @GetMapping("/{id}")
+    public Child retrieve(@PathVariable String id) {
+        Child child = service.retrieve(id);
+        if (child == null) throw new NotFoundException("Not found child Id: " + id);
+        return child;
     }
 
     @Override
-    @PutMapping
-    public Child update(@RequestBody Child child) {
-        //TODO
-        /*
-         * input: obj
-         * if obj is  null return error
-         * return save obj
-         * */
-        return null;
+    @PatchMapping
+    public ResponseEntity<Child> update(@RequestBody Child obj) {
+        Child child = service.retrieve(obj.get_id());
+        if (child == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return new ResponseEntity<>(service.update(obj), HttpStatus.OK);
     }
 
     @Override
     @DeleteMapping
-    public boolean delete(@RequestBody Child child) {
-        //TODO
-        /* input: obj
-         * if obj is  null return false
-         * return delete obj
-         */
-        return false;
-    }
-
-    @PostMapping("link")
-    public boolean acceptConnection() {
-        //TODO
-        /* input: connection
-         * if connection is null return false
-         * return set connection for child
-         */
-        return false;
+    public void delete(@RequestBody Child obj) {
+        service.delete(obj);
     }
 }
