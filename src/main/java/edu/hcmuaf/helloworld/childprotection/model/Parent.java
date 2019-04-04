@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @Document(collection = "parents")
-public class Parents {
+public class Parent {
     @Id
     private String _id;
     private String name;

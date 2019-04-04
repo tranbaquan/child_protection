@@ -10,36 +10,38 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/child")
-public class ChildApi implements CrudApi<Child> {
+public class ChildApi {
     @Autowired
     private ChildService service;
 
-    @Override
     @PostMapping
-    public ResponseEntity<Child> create(@RequestBody Child obj) {
+    public ResponseEntity create(@RequestBody Child obj) {
         Child child = service.create(obj);
         return new ResponseEntity<>(child, HttpStatus.OK);
     }
 
-    @Override
-    @GetMapping("/{id}")
-    public Child retrieve(@PathVariable String id) {
-        Child child = service.retrieve(id);
-        if (child == null) throw new NotFoundException("Not found child Id: " + id);
+    @GetMapping()
+    public ResponseEntity retrieve(@RequestParam String id) {
+        ResponseEntity child = null;
+        try {
+            child = new ResponseEntity(service.retrieve(id), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            child = ResponseEntity.badRequest().build();
+        }
         return child;
     }
 
-    @Override
-    @PatchMapping
-    public ResponseEntity<Child> update(@RequestBody Child obj) {
-        Child child = service.retrieve(obj.get_id());
-        if (child == null) {
-            return ResponseEntity.badRequest().build();
+    @PutMapping
+    public ResponseEntity update(@RequestBody Child obj) {
+        ResponseEntity result;
+        try {
+            result = new ResponseEntity<>(service.update(obj), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            result = ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(service.update(obj), HttpStatus.OK);
+        return result;
     }
 
-    @Override
     @DeleteMapping
     public void delete(@RequestBody Child obj) {
         service.delete(obj);

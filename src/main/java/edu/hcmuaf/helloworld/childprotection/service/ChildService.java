@@ -1,5 +1,6 @@
 package edu.hcmuaf.helloworld.childprotection.service;
 
+import edu.hcmuaf.helloworld.childprotection.exceptions.NotFoundException;
 import edu.hcmuaf.helloworld.childprotection.model.Child;
 import edu.hcmuaf.helloworld.childprotection.repository.ChildRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,28 +13,30 @@ public class ChildService implements Crud<Child> {
     @Autowired
     private ChildRepository repository;
 
-    @Override
     public Child create(Child obj) {
         return repository.save(obj);
     }
 
-    @Override
-    public Child retrieve(String id) {
-        return repository.findChildBy_id(id);
+    public Child retrieve(String id) throws NotFoundException {
+        Child child = repository.findChildBy_id(id);
+        if (child == null) {
+            throw new NotFoundException("Invalid id: " + id);
+        }
+        return child;
     }
 
-    @Override
-    public Child update(Child obj) {
+    public Child update(Child obj) throws NotFoundException {
+        if (obj.get_id() == null) {
+            throw new NotFoundException("Can not update this child");
+        }
         return repository.save(obj);
     }
 
 
-    @Override
     public void delete(Child obj) {
         repository.delete(obj);
     }
 
-    @Override
     public List<Child> getAll(String id) {
         return repository.findAllByParentsId(id);
     }
