@@ -2,7 +2,7 @@ package edu.hcmuaf.helloworld.childprotection.api;
 
 import edu.hcmuaf.helloworld.childprotection.exceptions.NotFoundException;
 import edu.hcmuaf.helloworld.childprotection.model.Child;
-import edu.hcmuaf.helloworld.childprotection.model.Parents;
+import edu.hcmuaf.helloworld.childprotection.model.Parent;
 import edu.hcmuaf.helloworld.childprotection.service.ParentsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,51 +13,50 @@ import java.util.List;
 
 @RestController
 @RequestMapping("parents")
-public class ParentsApi implements CrudApi<Parents> {
+public class ParentsApi {
     @Autowired
     private ParentsService service;
 
-    @Override
     @PostMapping
-    public ResponseEntity<Parents> create(@RequestBody Parents obj) {
-        Parents parents = service.create(obj);
+    public ResponseEntity create(@RequestBody Parent obj) {
+        Parent parents = service.create(obj);
         return new ResponseEntity<>(parents, HttpStatus.OK);
     }
 
-    @Override
-    @GetMapping("/{id}")
-    public Parents retrieve(@PathVariable String id) {
-        Parents parents = service.retrieve(id);
-        if (parents == null) throw new NotFoundException("Not found parents Id: " + id);
+    @GetMapping()
+    public ResponseEntity retrieve(@RequestParam String id) {
+        ResponseEntity parents = null;
+        try {
+            parents = new ResponseEntity(service.retrieve(id), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            parents = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         return parents;
     }
 
-    @Override
-    @PatchMapping
-    public ResponseEntity<Parents> update(@RequestBody Parents obj) {
-        Parents parents = service.retrieve(obj.get_id());
-        if (parents == null) {
-            return ResponseEntity.badRequest().build();
+    @PutMapping
+    public ResponseEntity update(@RequestBody Parent obj) {
+        ResponseEntity result;
+        try {
+            result = new ResponseEntity<>(service.update(obj), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            result = ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(service.update(obj), HttpStatus.OK);
+        return result;
     }
 
-    @Override
     @DeleteMapping
-    public void delete(@RequestBody Parents obj) {
+    public void delete(@RequestBody Parent obj) {
         service.delete(obj);
     }
 
     @PostMapping("link")
-    public ResponseEntity<Parents> linkToChild(@RequestParam String parentsId, @RequestParam String childId) {
-        boolean result = service.linkToChild(parentsId, childId);
-        if (!result) return (ResponseEntity<Parents>) ResponseEntity.status(HttpStatus.NOT_MODIFIED);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity linkToChild(@RequestParam String parentsId, @RequestParam String childId) throws NotFoundException {
+        return ResponseEntity.status(service.linkToChild(parentsId, childId) ? HttpStatus.OK : HttpStatus.BAD_REQUEST).build();
     }
 
-    @GetMapping("get/{id}")
-    public List<Child> getAllChild(@PathVariable String id) {
-        Parents parents = retrieve(id);
+    @GetMapping("get")
+    public List<Child> getAllChild(@RequestParam String id) {
         return service.getAll(id);
     }
 }

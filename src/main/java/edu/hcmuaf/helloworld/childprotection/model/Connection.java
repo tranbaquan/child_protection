@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Connection {
-    private Parents parents;
+    private Parent parents;
     private Child child;
 }
