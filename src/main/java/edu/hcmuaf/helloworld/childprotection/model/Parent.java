@@ -5,8 +5,6 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @Document(collection = "parents")
@@ -17,6 +15,5 @@ public class Parent {
     private String phone;
     private String email;
     private String password;
-    private Date dateOfBirth;
     private String role;
 }

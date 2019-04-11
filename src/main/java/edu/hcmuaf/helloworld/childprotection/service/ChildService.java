@@ -1,6 +1,5 @@
 package edu.hcmuaf.helloworld.childprotection.service;
 
-import edu.hcmuaf.helloworld.childprotection.exceptions.NotFoundException;
 import edu.hcmuaf.helloworld.childprotection.model.Child;
 import edu.hcmuaf.helloworld.childprotection.repository.ChildRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,26 +11,24 @@ import java.util.List;
 public class ChildService implements Crud<Child> {
     @Autowired
     private ChildRepository repository;
+    @Autowired
+    private SafeZoneService safeZoneService;
 
     public Child create(Child obj) {
         return repository.save(obj);
     }
 
     public Child retrieve(String id) {
-        Child child = repository.findChildBy_id(id);
-        if (child == null) {
-            throw new NotFoundException("Invalid id: " + id);
-        }
-        return child;
+        return repository.findChildBy_id(id);
+    }
+
+    public Child findByPhone(String phone) {
+        return repository.findChildByPhone(phone);
     }
 
     public Child update(Child obj) {
-        if (obj.get_id() == null) {
-            throw new NotFoundException("Can not update this child");
-        }
         return repository.save(obj);
     }
-
 
     public void delete(Child obj) {
         repository.delete(obj);

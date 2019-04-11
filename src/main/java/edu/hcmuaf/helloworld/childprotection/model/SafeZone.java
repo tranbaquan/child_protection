@@ -6,20 +6,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-import java.util.List;
-
-@Data
 @AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Document(collection = "child")
-public class Child {
+@Document(collection = "safezone")
+public class SafeZone {
     @Id
-    private String _id;
+    private String id;
+    private long longitude;
+    private long latitude;
+    private long rad;
     private String name;
-    private String phone;
-    private Date dateOfBirth;
-    private String role;
-    private String parentsId;
-    private List<SafeZone> safeZone;
+    private String childId;
 }
