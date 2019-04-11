@@ -15,7 +15,7 @@ public class ParentsService implements Crud<Parent> {
     private ParentsRepository repository;
     @Autowired
     private ChildService childService;
-
+    @Autowired
     private SafeZoneService safeZoneService;
 
     public Parent create(Parent obj) {
