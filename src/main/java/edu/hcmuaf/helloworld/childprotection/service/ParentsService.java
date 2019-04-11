@@ -20,8 +20,8 @@ public class ParentsService implements Crud<Parent> {
         return repository.insert(obj);
     }
 
-    public Parent retrieve(String id) throws NotFoundException {
-        Parent parent = null;
+    public Parent retrieve(String id)  {
+        Parent parent;
         try {
             parent = repository.findParentsBy_id(id);
         } catch (Exception e) {
@@ -31,7 +31,7 @@ public class ParentsService implements Crud<Parent> {
 
     }
 
-    public Parent update(Parent obj) throws NotFoundException {
+    public Parent update(Parent obj) {
         if (obj.get_id() == null) throw new NotFoundException("Not found parent");
         return repository.save(obj);
     }
@@ -44,7 +44,7 @@ public class ParentsService implements Crud<Parent> {
         return childService.getAll(id);
     }
 
-    public boolean linkToChild(String parentsId, String childId) throws NotFoundException {
+    public boolean linkToChild(String parentsId, String childId) {
         Child child = childService.retrieve(childId);
         if (child == null || retrieve(parentsId) == null) return false;
         child.setParentsId(parentsId);

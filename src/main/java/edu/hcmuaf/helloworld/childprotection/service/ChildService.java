@@ -17,7 +17,7 @@ public class ChildService implements Crud<Child> {
         return repository.save(obj);
     }
 
-    public Child retrieve(String id) throws NotFoundException {
+    public Child retrieve(String id) {
         Child child = repository.findChildBy_id(id);
         if (child == null) {
             throw new NotFoundException("Invalid id: " + id);
@@ -25,7 +25,7 @@ public class ChildService implements Crud<Child> {
         return child;
     }
 
-    public Child update(Child obj) throws NotFoundException {
+    public Child update(Child obj) {
         if (obj.get_id() == null) {
             throw new NotFoundException("Can not update this child");
         }

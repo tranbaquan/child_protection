@@ -22,7 +22,7 @@ public class ChildApi {
 
     @GetMapping()
     public ResponseEntity retrieve(@RequestParam String id) {
-        ResponseEntity child = null;
+        ResponseEntity child;
         try {
             child = new ResponseEntity(service.retrieve(id), HttpStatus.OK);
         } catch (NotFoundException e) {
