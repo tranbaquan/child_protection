@@ -1,49 +1,40 @@
 package edu.hcmuaf.helloworld.childprotection.api;
 
-import edu.hcmuaf.helloworld.childprotection.exceptions.NotFoundException;
 import edu.hcmuaf.helloworld.childprotection.model.Child;
 import edu.hcmuaf.helloworld.childprotection.service.ChildService;
+import edu.hcmuaf.helloworld.childprotection.service.Crud;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/child")
-public class ChildApi {
+public class ChildApi implements Crud<Child> {
     @Autowired
     private ChildService service;
 
+    @Override
     @PostMapping
-    public ResponseEntity create(@RequestBody Child obj) {
-        Child child = service.create(obj);
-        return new ResponseEntity<>(child, HttpStatus.OK);
+    public Child create(@RequestBody Child obj) {
+        return service.create(obj);
     }
 
-    @GetMapping()
-    public ResponseEntity retrieve(@RequestParam String id) {
-        ResponseEntity child = null;
-        try {
-            child = new ResponseEntity(service.retrieve(id), HttpStatus.OK);
-        } catch (NotFoundException e) {
-            child = ResponseEntity.badRequest().build();
-        }
-        return child;
+    @Override
+    @GetMapping
+    public Child retrieve(@RequestParam String id) {
+        return service.retrieve(id);
     }
 
+    @Override
     @PutMapping
-    public ResponseEntity update(@RequestBody Child obj) {
-        ResponseEntity result;
-        try {
-            result = new ResponseEntity<>(service.update(obj), HttpStatus.OK);
-        } catch (NotFoundException e) {
-            result = ResponseEntity.notFound().build();
-        }
-        return result;
+    public Child update(@RequestBody Child obj) {
+        return service.update(obj);
     }
 
+    @Override
     @DeleteMapping
     public void delete(@RequestBody Child obj) {
         service.delete(obj);
     }
+
+
 }
