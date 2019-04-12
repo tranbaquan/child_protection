@@ -35,6 +35,4 @@ public class ChildApi implements Crud<Child> {
     public void delete(@RequestBody Child obj) {
         service.delete(obj);
     }
-
-
 }
